@@ -5,8 +5,6 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    public static Player Instance;
-
     [SerializeField] private float stepTime = .5f;
     [SerializeField] private GameObject tailPrefab;
     private float stepTimer;
@@ -15,20 +13,13 @@ public class Player : MonoBehaviour
     private Vector2 nextDirection = Vector2.right;
 
     private ScoreManager scoreManager;
-    private GameManager gameManager;
 
     private List<Transform> tailSegments = new List<Transform>();
     private List<Vector3> positionsHistory = new List<Vector3>();
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
-    public void Initialize(ScoreManager sm, GameManager gm)
+    public void Initialize(ScoreManager sm)
     {
         scoreManager = sm;
-        gameManager = gm;
         positionsHistory.Add(transform.position);
     }
 
@@ -76,19 +67,19 @@ public class Player : MonoBehaviour
             positionsHistory.RemoveAt(positionsHistory.Count - 1);
         }
     }
-        
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Wall") || collision.CompareTag("Tail"))
         {
-            gameManager.GameOver();
+            GameManager.Instance.GameOver();
         }
 
         if (collision.CompareTag("Fruit"))
         {
             Destroy(collision.gameObject);
             scoreManager.UpdateScore(1);
-            gameManager.GenerateFood();
+            GameManager.Instance.GenerateFood();
             AddTailSegment();
         }
     }

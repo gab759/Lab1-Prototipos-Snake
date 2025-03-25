@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class GameManager : MonoBehaviour
+
+public class GameManager : SingletonNotPersistent<GameManager>
 {
     [SerializeField] private GameObject mealPrefab;
     public Vector2 limits;
     public int maxScore = 999;
 
-    [SerializeField] private ScoreManager scoreManager;
+    [SerializeField] public ScoreManager scoreManager;
     [SerializeField] private UI_Manager uiManager;
+    [SerializeField] private Player player;
 
     [SerializeField] private GameObject gameOverPanel;
     private bool isGameOver = false;
 
     private void Start()
     {
-        scoreManager.Initialize(this, uiManager);
-        Player.Instance.Initialize(scoreManager, this);
+        scoreManager.Initialize(uiManager);
+        player.Initialize(scoreManager);
         gameOverPanel.SetActive(false);
         GenerateFood();
     }

@@ -7,12 +7,10 @@ public class ScoreManager : MonoBehaviour
     public int ActualScore { get; private set; }
     [SerializeField] private ScoreData scoreData;
 
-    private GameManager _GM;
     private UI_Manager _UIM;
 
-    public void Initialize(GameManager gm, UI_Manager uim)
+    public void Initialize(UI_Manager uim)
     {
-        _GM = gm;
         _UIM = uim;
 
         ActualScore = 0;
@@ -30,9 +28,9 @@ public class ScoreManager : MonoBehaviour
 
         _UIM.UpdateText(ActualScore, scoreData.highScore);
 
-        if (ActualScore >= _GM.maxScore)
+        if (ActualScore >= GameManager.Instance.maxScore)
         {
-            _GM.GameOver();
-        }
+            GameManager.Instance.GameOver();
+        }   
     }
 }
